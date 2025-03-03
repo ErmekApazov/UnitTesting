@@ -39,6 +39,33 @@ class CalculatorTest {
         assertArrayEquals(new int[]{1,2,3}, new int[]{1,3,2}, "Arrays are not same");
     }
 
+    @Test
+    void testCase4(){
+        System.out.println("Test Case 4");
+
+        String nullString = null;
+        String notNullString = "Not Null";
+
+        assertNull(nullString);
+        assertNotNull(notNullString);
+
+        assertNotNull(nullString);
+        assertNull(notNullString);
+    }
+
+    @Test
+    void testCase5(){
+        System.out.println("Test Case 5");
+
+        Calculator c1 = new Calculator();
+        Calculator c2 = c1;
+        Calculator c3 = new Calculator();
+
+        assertSame(c1, c2);
+        assertSame(c1, c3, "Two objects are not the same");
+
+    }
+
 
 
 

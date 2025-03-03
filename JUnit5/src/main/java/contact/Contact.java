@@ -42,7 +42,7 @@ public class Contact {
             throw new RuntimeException("Phone number should start with zero");
         }
 
-        if(this.phoneNumber.matches("\\d+")){
+        if(!this.phoneNumber.matches("\\d+")){
             throw new RuntimeException("Phone number contain only digits");
         }
     }

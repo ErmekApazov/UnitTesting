@@ -1,21 +1,37 @@
 package contact;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class ContactManagerTest {
 
+    ContactManager contactManager;
+
+    @BeforeAll
+    public static void printFirst(){
+        System.out.println("Print before all tests");
+    }
+
+    @BeforeEach
+    public void setup(){
+        contactManager = new ContactManager();
+    }
+            // this method helps to do one operation when you run all test methods
+            // means you don't have to create an object of ContactManager in every test method.
+
+
+
     @Test
     public void shouldCreateContact() {
 
-        ContactManager contactManager = new ContactManager();
+//        ContactManager contactManager = new ContactManager();
+
         contactManager.addContact("John", "Doe", "0123456789");
 
-            // to verify if contactList is not empty, see below:
+        // to verify if contactList is not empty, see below:
         Assertions.assertFalse(contactManager.getAllContacts().isEmpty());
-            // to verify if contactManager's size is 1:
+        // to verify if contactManager's size is 1:
         Assertions.assertEquals(1, contactManager.getAllContacts().size());
 
         /*The Assertions class in JUnit 5 provides a set of static assertion methods to help verify expected outcomes
@@ -39,6 +55,67 @@ class ContactManagerTest {
 
             */
 
+        Assertions.assertTrue(contactManager.getAllContacts().stream()
+                .filter(contact -> contact.getFirstName().equals("John") &&
+                        contact.getLastName().equals("Doe") &&
+                        contact.getPhoneNumber().equals("0123456789"))
+                .findAny()
+                .isPresent());
+
+        // ---------------------------instead of filter() -> anyMatch() --------------------------------
+
+        Assertions.assertTrue(contactManager.getAllContacts().stream()
+                .anyMatch(contact -> contact.getFirstName().equals("John") &&
+                        contact.getLastName().equals("Doe") &&
+                        contact.getPhoneNumber().equals("0123456789")));
     }
+        // --------------------------------------------------------------------------------------------
+
+        @Test
+        @DisplayName("😀 Should Not Create Contact When First name is Null")
+        public void shouldThrowRuntimeExceptionWhenFirstNameIsNull() {
+
+//            ContactManager contactManager = new ContactManager();
+
+            Assertions.assertThrows(RuntimeException.class, () -> {
+                contactManager.addContact(null, "Doe", "0123456789");
+            });
+        }
+
+        @Test
+        @DisplayName("😀 Should Not Create Contact When Last Name is Null")
+        public void shouldTrowRuntimeExceptionWhenLastNameIsNull(){
+
+//            ContactManager contactManager = new ContactManager();
+
+            Assertions.assertThrows(RuntimeException.class, () -> {
+                contactManager.addContact("John", null, "0123456789");
+            });
+        }
+
+        @Test
+        @DisplayName("☎ Should Not Create Contact When Phone Number is Null")
+        public void shouldThrowRuntimeExceptionWhenPhoneNumberIsNull(){
+
+//            ContactManager contactManager = new ContactManager();
+
+
+            Assertions.assertThrows(RuntimeException.class, () -> {
+                contactManager.addContact("John", "Doe", null);
+            });
+        }
+
+        /*The @DisplayName() annotation in JUnit 5 is used to provide a custom, human-readable name for test classes
+        and methods. Instead of relying on method names (which follow Java naming conventions), @DisplayName allows
+        you to write descriptive test names that improve readability in test reports.
+
+        🔹 Key Purpose of @DisplayName
+            Makes test reports more readable by showing a friendly name.
+            Allows spaces, special characters, and emojis in test names.
+            Helps in better documentation of test cases.
+        */
+
+
+
 
 }
